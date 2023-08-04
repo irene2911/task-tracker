@@ -1,2 +1,10 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<script>
+  import Sidebar from '../components/sidebar/Sidebar.svelte';
+</script>
+
+<main>
+  <div class="grid grid-cols-5 min-h-screen">
+    <div class="col-span-1"><Sidebar /></div>
+    <div class="col-span-4">data</div>
+  </div>
+</main>

@@ -28,7 +28,7 @@
   <div class="flex flex-row w-full justify-between items-center">
     {#if isRenaming}
       <form
-        action={`?/rename&id=${board.id}`}
+        action={`?/rename&id=${board._id}`}
         method="POST"
         bind:this={formRef}
       >
@@ -56,7 +56,7 @@
   {#if isEditing}
     <div class="flex flex-row w-full justify-evenly">
       <button on:click={handleRename}>rename</button>
-      <form action={`?/delete&id=${board.id}`} method="post">
+      <form action={`?/delete&id=${board._id}`} method="post">
         <button type="submit">delete</button>
       </form>
     </div>

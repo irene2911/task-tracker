@@ -38,7 +38,9 @@
         </form>
       {/if}
       {#each $sidebarBoards as board}
-        <SidebarBoard {board} />
+        <a href={`/${board._id}`}>
+          <SidebarBoard {board} />
+        </a>
       {/each}
     </div>
   </div>

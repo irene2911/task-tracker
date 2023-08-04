@@ -33,8 +33,8 @@ export const actions = {
   },
   delete: async (event) => {
     const id = event.url.searchParams.get('id');
-    if (!id) return fail(400, { error: 'no id provided' });
 
+    if (!id) return fail(400, { error: 'no id provided' });
     try {
       const response = await axios.delete(`http://localhost:3000/boards/${id}`);
       return { status: 200, data: response.data };

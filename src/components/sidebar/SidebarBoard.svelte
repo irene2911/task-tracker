@@ -4,6 +4,7 @@
   import axios from 'axios';
   import {
     closeEdit,
+    createBoardOptions,
     editBoard,
     handleOk,
     handleRename,
@@ -14,9 +15,11 @@
   let newName: string = '';
   let formRef: HTMLFormElement | null = null;
   let inputRef: HTMLInputElement | null = null;
+  let options = createBoardOptions(board._id);
+  $: options = $sidebarOptions[board._id] || {};
 
   $: {
-    if ($sidebarOptions.isRenaming) {
+    if (options.isRenaming) {
       inputRef?.focus();
     }
   }
@@ -50,43 +53,44 @@
 
 <div class="flex flex-col gap-5 p-5 bg-red-200 rounded-2xl">
   <div class="flex flex-row w-full justify-between items-center">
-    {#if $sidebarOptions.isRenaming}
-      <form on:submit={renameBoard} bind:this={formRef}>
-        <input
-          placeholder={board.name}
-          name="renameInput"
-          class="border border-black p-2"
-          bind:this={inputRef}
-          bind:value={newName}
-          on:keypress={(e) => {
-            if (e.key === 'Enter') {
-              formRef?.submit();
-            }
-          }}
-        />
-      </form>
-    {:else}
-      <a href={`/${board._id}`} class="w-full">
+    <a href={`/${board._id}`} class="w-full">
+      {#if options.isRenaming}
+        <form on:submit={renameBoard}>
+          <input
+            placeholder={board.name}
+            name="renameInput"
+            class="border border-black p-2"
+            bind:value={newName}
+            on:keypress={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault(); // Prevent form submission
+                renameBoard(); // Call renameBoard on Enter key press
+              }
+            }}
+          />
+        </form>
+      {:else}
         <span>{board.name}</span>
-      </a>
-    {/if}
-    {#if !$sidebarOptions.isEditing}
-      <button on:click={editBoard}>...</button>
-    {:else if $sidebarOptions.isEditing && !$sidebarOptions.isRenaming}
-      <button on:click={closeEdit}>x</button>
+      {/if}
+    </a>
+
+    {#if !options.isEditing}
+      <button on:click={() => editBoard(board._id)}>...</button>
+    {:else if options.isEditing && !options.isRenaming}
+      <button on:click={() => closeEdit(board._id)}>x</button>
     {/if}
   </div>
-  {#if $sidebarOptions.isEditing && !$sidebarOptions.isRenaming}
+  {#if options.isEditing && !options.isRenaming}
     <div class="flex flex-row w-full justify-evenly">
-      <button on:click={handleRename}>rename</button>
+      <button on:click={() => handleRename(board._id)}>rename</button>
       <form on:submit={deleteBoard}>
         <button type="submit">delete</button>
       </form>
     </div>
-  {:else if $sidebarOptions.isRenaming}
+  {:else if options.isRenaming}
     <div class="flex flex-row w-full justify-evenly">
-      <button on:click={handleOk}>OK</button>
-      <button on:click={closeEdit}>X</button>
+      <button on:click={() => handleOk(board._id)}>OK</button>
+      <button on:click={() => closeEdit(board._id)}>X</button>
     </div>
   {/if}
 </div>

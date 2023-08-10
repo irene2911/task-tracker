@@ -5,11 +5,6 @@ export const sidebarStore = writable({
   addBoard: false,
 });
 
-export const sidebarOptions = writable({
-  isEditing: false,
-  isRenaming: false,
-});
-
 export const toggleSidebar = () => {
   sidebarStore.update((currentValue) => ({
     ...currentValue,
@@ -33,32 +28,66 @@ export const addBoardFromCollapsed = () => {
   }));
 };
 
-export const editBoard = () => {
-  sidebarOptions.update((currentValue) => ({
-    ...currentValue,
-    isEditing: !currentValue.isEditing,
-  }));
-};
+export type SidebarOptions = Record<
+  string,
+  { isEditing: boolean; isRenaming: boolean }
+>;
 
-export const handleRename = () => {
-  sidebarOptions.update((currentValue) => ({
-    ...currentValue,
-    isRenaming: !currentValue.isRenaming,
-  }));
-};
+export const sidebarOptions = writable<SidebarOptions>({});
 
-export const handleOk = () => {
-  sidebarOptions.update((currentValue) => ({
-    ...currentValue,
+export const createBoardOptions = (boardId: string) => {
+  const options = {
     isEditing: false,
     isRenaming: false,
+  };
+
+  sidebarOptions.update((currentOptions) => ({
+    ...currentOptions,
+    [boardId]: options,
+  }));
+
+  return options;
+};
+
+export const editBoard = (boardId: string) => {
+  console.log('Editing board:', boardId);
+
+  sidebarOptions.update((currentOptions) => ({
+    ...currentOptions,
+    [boardId]: {
+      ...currentOptions[boardId],
+      isEditing: true,
+    },
   }));
 };
 
-export const closeEdit = () => {
-  sidebarOptions.update((currentValue) => ({
-    ...currentValue,
-    isEditing: false,
-    isRenaming: false,
+export const handleRename = (boardId: string) => {
+  sidebarOptions.update((currentOptions) => ({
+    ...currentOptions,
+    [boardId]: {
+      ...currentOptions[boardId],
+      isRenaming: !currentOptions[boardId].isRenaming,
+    },
+  }));
+};
+
+export const handleOk = (boardId: string) => {
+  sidebarOptions.update((currentOptions) => ({
+    ...currentOptions,
+    [boardId]: {
+      isEditing: false,
+      isRenaming: false,
+    },
+  }));
+};
+
+export const closeEdit = (boardId: string) => {
+  sidebarOptions.update((currentOptions) => ({
+    ...currentOptions,
+    [boardId]: {
+      ...currentOptions[boardId],
+      isEditing: false,
+      isRenaming: false,
+    },
   }));
 };

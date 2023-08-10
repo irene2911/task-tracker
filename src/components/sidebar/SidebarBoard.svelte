@@ -53,26 +53,26 @@
 
 <div class="flex flex-col gap-5 p-5 bg-red-200 rounded-2xl">
   <div class="flex flex-row w-full justify-between items-center">
-    <a href={`/${board._id}`} class="w-full">
-      {#if options.isRenaming}
-        <form on:submit={renameBoard}>
-          <input
-            placeholder={board.name}
-            name="renameInput"
-            class="border border-black p-2"
-            bind:value={newName}
-            on:keypress={(e) => {
-              if (e.key === 'Enter') {
-                e.preventDefault(); // Prevent form submission
-                renameBoard(); // Call renameBoard on Enter key press
-              }
-            }}
-          />
-        </form>
-      {:else}
+    {#if options.isRenaming}
+      <form on:submit={renameBoard}>
+        <input
+          placeholder={board.name}
+          name="renameInput"
+          class="border border-black p-2"
+          bind:value={newName}
+          on:keypress={(e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault(); // Prevent form submission
+              renameBoard(); // Call renameBoard on Enter key press
+            }
+          }}
+        />
+      </form>
+    {:else}
+      <a href={`/${board._id}`} class="w-full">
         <span>{board.name}</span>
-      {/if}
-    </a>
+      </a>
+    {/if}
 
     {#if !options.isEditing}
       <button on:click={() => editBoard(board._id)}>...</button>

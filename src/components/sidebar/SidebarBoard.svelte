@@ -54,16 +54,16 @@
 <div class="flex flex-col gap-5 p-5 bg-red-200 rounded-2xl">
   <div class="flex flex-row w-full justify-between items-center">
     {#if options.isRenaming}
-      <form on:submit={renameBoard}>
+      <form on:submit={renameBoard} bind:this={formRef}>
         <input
           placeholder={board.name}
           name="renameInput"
           class="border border-black p-2"
+          bind:this={inputRef}
           bind:value={newName}
           on:keypress={(e) => {
             if (e.key === 'Enter') {
-              e.preventDefault(); // Prevent form submission
-              renameBoard(); // Call renameBoard on Enter key press
+              formRef?.submit();
             }
           }}
         />

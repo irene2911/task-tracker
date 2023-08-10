@@ -5,6 +5,18 @@
   import { dndzone } from 'svelte-dnd-action';
 
   export let container: State;
+  let inputRef: HTMLInputElement | null = null;
+  let showAddInput = false;
+
+  function handleAddInput() {
+    showAddInput = !showAddInput;
+  }
+
+  $: {
+    if (showAddInput) {
+      inputRef?.focus();
+    }
+  }
 
   const flipDurationMs = 300;
 
@@ -22,45 +34,45 @@
     text: item.text,
     id: item._id,
   }));
-  $: console.log(items);
 </script>
 
 <section class="flex flex-row w-full justify-evenly gap-5 flex-1">
   <div class="board">
-    <div class="border h-full">
-      <div class="flex flex-row w-full justify-between items-center">
-        <div class="column-title">{container.name}</div>
-        <!-- {#if !$inputVisibilityStore[column.id]}
-                <button
-                  class="my-auto"
-                  on:click={() => showInput(column)}
-                  id={`${column.id}`}>Add</button
-                >
-              {:else}
-                <button on:click={() => hideInput(column)}>Add</button>
-              {/if} -->
+    <div class="h-full flex flex-col gap-4">
+      <div
+        class="flex flex-col w-full justify-between items-center bg-white rounded-xl"
+      >
+        <div class="px-5 py-3 flex w-full justify-between">
+          <p class="column-title">{container.name}</p>
+          <div class="flex gap-3">
+            <button class="mb-1.5">...</button>
+            <button on:click={handleAddInput}>+</button>
+          </div>
+        </div>
+        {#if showAddInput}
+          <div class="pt-5 flex flex-col">
+            <input
+              class="px-3 py-2 rounded-xl bg-gray-100"
+              bind:this={inputRef}
+            />
+            <button class="py-5">Add</button>
+          </div>
+        {/if}
       </div>
-      <!-- {#if $inputVisibilityStore[column.id]}
-              <input
-                class="border-[1px] rounded-md w-full px-5 py-3"
-                type="text"
-                placeholder="Enter something"
-                bind:this={inputElement}
-                on:blur={() => {
-                  hideInput(column);
-                  addNewItem(column.id, inputElement.value);
-                  inputElement.value = '';
-                }}
-              />
-            {/if} -->
       <div
         class="column-content"
-        use:dndzone={{ items, flipDurationMs }}
+        use:dndzone={{
+          items,
+          flipDurationMs,
+        }}
         on:consider={considerCard}
         on:finalize={finalizeCard}
       >
         {#each items as task (task.id)}
-          <div animate:flip={{ duration: flipDurationMs }} class="card">
+          <div
+            animate:flip={{ duration: flipDurationMs }}
+            class="bg-red-100 w-full h-[100px] flex items-center justify-center rounded-xl"
+          >
             <Task {task} />
           </div>
         {/each}
@@ -71,7 +83,8 @@
 
 <style>
   .board {
-    height: 90vh;
+    /* height: 70vh; */
+    min-height: 70vh;
     width: 100%;
     /* margin-bottom: 40px; */
   }
@@ -104,6 +117,6 @@
     justify-content: center;
     align-items: center;
     background-color: #dddddd;
-    border: 1px solid #333333;
+    /* border: 1px solid #333333; */
   }
 </style>

@@ -1,64 +1,92 @@
 <script lang="ts">
+  import { invalidateAll } from '$app/navigation';
   import type { SidebarBoard } from '$lib/SidebarBoardsStore';
+  import axios from 'axios';
+  import {
+    closeEdit,
+    editBoard,
+    handleOk,
+    handleRename,
+    sidebarOptions,
+  } from './store';
 
   export let board: SidebarBoard;
-  let isEditing = false;
-  let isRenaming = false;
+  let newName: string = '';
   let formRef: HTMLFormElement | null = null;
   let inputRef: HTMLInputElement | null = null;
 
   $: {
-    if (isRenaming) {
+    if ($sidebarOptions.isRenaming) {
       inputRef?.focus();
     }
   }
 
-  function handleEditing() {
-    isEditing = !isEditing;
+  async function renameBoard() {
+    try {
+      await axios.put(`/api/renameBoard/${board._id}`, {
+        newName,
+      });
+
+      // TODO: fix me
+      invalidateAll();
+
+      newName = '';
+    } catch (error) {
+      console.log(error);
+    }
   }
 
-  function handleRename() {
-    isRenaming = !isRenaming;
+  async function deleteBoard() {
+    try {
+      await axios.delete(`/api/deleteBoard/${board._id}`);
+
+      // TODO: fix me
+      invalidateAll();
+    } catch (error) {
+      console.log(error);
+    }
   }
 </script>
 
-<div
-  class="flex flex-col gap-5 bg-blue-100 px-3 py-4 border-[1px] border-black"
->
+<div class="flex flex-col gap-5 p-5 bg-red-200 rounded-2xl">
   <div class="flex flex-row w-full justify-between items-center">
-    {#if isRenaming}
-      <form
-        action={`?/rename&id=${board._id}`}
-        method="POST"
-        bind:this={formRef}
-      >
+    {#if $sidebarOptions.isRenaming}
+      <form on:submit={renameBoard} bind:this={formRef}>
         <input
+          placeholder={board.name}
           name="renameInput"
           class="border border-black p-2"
+          bind:this={inputRef}
+          bind:value={newName}
           on:keypress={(e) => {
             if (e.key === 'Enter') {
               formRef?.submit();
             }
           }}
-          bind:this={inputRef}
-          on:blur={() => (isRenaming = false)}
         />
       </form>
     {:else}
-      <span>{board.name}</span>
+      <a href={`/${board._id}`} class="w-full">
+        <span>{board.name}</span>
+      </a>
     {/if}
-    {#if !isEditing}
-      <button on:click={handleEditing}>...</button>
-    {:else}
-      <button on:click={handleEditing}>X</button>
+    {#if !$sidebarOptions.isEditing}
+      <button on:click={editBoard}>...</button>
+    {:else if $sidebarOptions.isEditing && !$sidebarOptions.isRenaming}
+      <button on:click={closeEdit}>x</button>
     {/if}
   </div>
-  {#if isEditing}
+  {#if $sidebarOptions.isEditing && !$sidebarOptions.isRenaming}
     <div class="flex flex-row w-full justify-evenly">
       <button on:click={handleRename}>rename</button>
-      <form action={`?/delete&id=${board._id}`} method="post">
+      <form on:submit={deleteBoard}>
         <button type="submit">delete</button>
       </form>
+    </div>
+  {:else if $sidebarOptions.isRenaming}
+    <div class="flex flex-row w-full justify-evenly">
+      <button on:click={handleOk}>OK</button>
+      <button on:click={closeEdit}>X</button>
     </div>
   {/if}
 </div>

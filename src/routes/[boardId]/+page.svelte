@@ -2,8 +2,6 @@
   import StateContainer from '../../components/states/StateContainer.svelte';
 
   export let data;
-
-  // console.log(data.boards);
 </script>
 
 {#if !data}

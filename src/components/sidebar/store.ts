@@ -50,8 +50,6 @@ export const createBoardOptions = (boardId: string) => {
 };
 
 export const editBoard = (boardId: string) => {
-  console.log('Editing board:', boardId);
-
   sidebarOptions.update((currentOptions) => ({
     ...currentOptions,
     [boardId]: {

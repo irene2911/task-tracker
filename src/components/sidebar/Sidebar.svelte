@@ -41,10 +41,14 @@
     </div>
 
     <div class="flex flex-col gap-7">
-      <div class="w-full px-3 py-4 text-center">
-        <button class="text-2xl" on:click={toggleAddBoard}>+</button>
-      </div>
-      {#if $sidebarStore.addBoard}
+      {#if !$sidebarStore.addBoard}
+        <div class="w-full px-3 py-4 text-center">
+          <button class="text-2xl" on:click={toggleAddBoard}>+</button>
+        </div>
+      {:else}
+        <div class="w-full px-3 py-4 text-center">
+          <button class="text-2xl" on:click={toggleAddBoard}>X</button>
+        </div>
         <form on:submit={createBoard}>
           <input
             class="bg-blue-50 px-3 py-4 border-[1px] border-black w-full"

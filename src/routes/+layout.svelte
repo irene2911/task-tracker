@@ -20,7 +20,7 @@
       <CollapsedSidebar />
     {/if}
     <button
-      class="w-[16px] h-[150px] absolute -right-4 top-[35%] bg-red-500 rounded-e-xl"
+      class="w-[16px] h-[150px] absolute -right-4 top-[35%] bg-gray-200/80 hover:bg-red-300 hover:shadow-inner hover:shadow-red-500/60 rounded-e-xl"
       on:click={toggleSidebar}
     />
   </div>

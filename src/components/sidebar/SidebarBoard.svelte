@@ -51,7 +51,9 @@
   }
 </script>
 
-<div class="flex flex-col gap-5 p-5 bg-red-200 rounded-2xl">
+<div
+  class="flex flex-col gap-5 p-5 bg-red-200 shadow-inner shadow-red-400/50 rounded-2xl"
+>
   <div class="flex flex-row w-full justify-between items-center">
     {#if options.isRenaming}
       <form on:submit={renameBoard} bind:this={formRef}>

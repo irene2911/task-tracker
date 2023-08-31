@@ -3,6 +3,7 @@ import { writable } from 'svelte/store';
 export interface SidebarBoard {
   _id: string;
   name: string;
+  description: string;
   states: State[];
 }
 
@@ -13,6 +14,7 @@ export interface State {
 }
 
 export interface Item {
+  order: number;
   _id: string;
   text: string;
 }

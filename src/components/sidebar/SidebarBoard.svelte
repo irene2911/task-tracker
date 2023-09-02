@@ -52,7 +52,7 @@
 </script>
 
 <div
-  class="flex flex-col gap-5 p-5 bg-red-200 shadow-inner shadow-red-400/50 rounded-2xl"
+  class="flex flex-col gap-5 p-5 bg-red-300/90 shadow-inner shadow-red-500/50 rounded-2xl"
 >
   <div class="flex flex-row w-full justify-between items-center">
     {#if options.isRenaming}
@@ -60,7 +60,7 @@
         <input
           placeholder={board.name}
           name="renameInput"
-          class="border border-black p-2"
+          class="block w-full rounded-lg border-0 ring-0 focus:ring-red-500/30 focus:ring-1 outline-0 px-4 py-2 resize-none focus:bg-white bg-gray-50"
           bind:this={inputRef}
           bind:value={newName}
           on:keypress={(e) => {
@@ -84,15 +84,31 @@
   </div>
   {#if options.isEditing && !options.isRenaming}
     <div class="flex flex-row w-full justify-evenly">
-      <button on:click={() => handleRename(board._id)}>rename</button>
+      <button
+        on:click={() => handleRename(board._id)}
+        class="text-sm bg-red-200 shadow-inner shadow-red-400/50 rounded-2xl px-5 py-1 hover:bg-red-100"
+        >rename</button
+      >
       <form on:submit={deleteBoard}>
-        <button type="submit">delete</button>
+        <button
+          type="submit"
+          class="text-sm bg-red-200 shadow-inner shadow-red-400/50 rounded-2xl px-5 py-1 hover:bg-red-100"
+          >delete</button
+        >
       </form>
     </div>
   {:else if options.isRenaming}
     <div class="flex flex-row w-full justify-evenly">
-      <button on:click={() => handleOk(board._id)}>OK</button>
-      <button on:click={() => closeEdit(board._id)}>X</button>
+      <button
+        on:click={() => handleOk(board._id)}
+        class="text-sm bg-red-200 shadow-inner shadow-red-400/50 rounded-2xl px-5 py-1 hover:bg-red-100"
+        >OK</button
+      >
+      <button
+        on:click={() => closeEdit(board._id)}
+        class="text-sm bg-red-200 shadow-inner shadow-red-400/50 rounded-2xl px-5 py-1 hover:bg-red-100"
+        >X</button
+      >
     </div>
   {/if}
 </div>

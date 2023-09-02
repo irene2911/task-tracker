@@ -7,31 +7,34 @@
   import { page } from '$app/stores';
   import { overrideItemIdKeyNameBeforeInitialisingDndZones } from 'svelte-dnd-action';
   import type { State } from '$lib/SidebarBoardsStore';
+  import CreateTaskModalLogic from '../Modal/CreateTaskModalLogic.svelte';
+  import CreateTaskModal from '../Modal/CreateTaskModal.svelte';
   overrideItemIdKeyNameBeforeInitialisingDndZones('_id');
 
   export let container: State;
-  let inputRef: HTMLInputElement | null = null;
-  let formRef: HTMLFormElement | null = null;
   let showAddInput = false;
-  let taskText: string = '';
+  let showModal = false;
 
-  let { boardId } = $page.params;
-
-  function handleAddInput() {
-    showAddInput = !showAddInput;
+  function closeModal() {
+    showAddInput = false;
+    showModal = false;
+  }
+  function openModal() {
+    showAddInput = true;
+    showModal = true;
   }
 
-  $: {
-    if (showAddInput) {
-      inputRef?.focus();
-    }
-  }
-
-  async function createTask() {
+  async function createTask(taskText: string, taskDesc: string) {
     try {
+      if (taskDesc !== '') {
+        taskText = taskText;
+      }
+      let { boardId } = $page.params;
+
       await axios.post(`/api/addTasks/${boardId}`, {
         containerId: container._id,
-        taskText: taskText,
+        taskText,
+        taskDesc,
       });
       // TODO: fix me
       invalidateAll();
@@ -42,11 +45,13 @@
     }
   }
 
-  async function moveTasks(selectedTask: string, newIndex: number) {
+  async function moveTasks(selectedTaskId: string, newIndex: number) {
     try {
+      let { boardId } = $page.params;
+
       await axios.post(`/api/moveTask/${boardId}`, {
         toContainer: container._id,
-        selectedTask,
+        selectedTaskId,
         newIndex,
       });
       // TODO: fix me
@@ -73,7 +78,7 @@
       const taskIndex = items.findIndex((task) => task._id === selectedTaskId);
       if (taskIndex !== -1) {
         newIndex = taskIndex;
-        await moveTasks(e.detail.info.id, newIndex);
+        await moveTasks(selectedTaskId, newIndex);
         items = [...e.detail.items];
         return newIndex;
       }
@@ -82,6 +87,7 @@
 
   $: items =
     container?.items?.map((item) => ({
+      desc: item.desc,
       order: item.order,
       text: item.text,
       _id: item._id,
@@ -98,27 +104,17 @@
           <p class="flex justify-center items-center">{container.name}</p>
           <div class="flex gap-3">
             <button class="mb-1.5">...</button>
-            <button on:click={handleAddInput}>+</button>
+            <button on:click={openModal} class="hover:scale-125">+</button>
           </div>
         </div>
         {#if showAddInput}
-          <form on:submit={createTask} bind:this={formRef}>
-            <div class="pt-5 flex flex-col">
-              <input
-                class="px-3 py-2 rounded-xl bg-white"
-                bind:this={inputRef}
-                bind:value={taskText}
-                on:keypress={(e) => {
-                  if (e.key === 'Enter') {
-                    setTimeout(() => {
-                      formRef?.submit();
-                    }, 1);
-                  }
-                }}
-              />
-            </div>
-          </form>
-          <button class="py-5" on:click={createTask}>Add</button>
+          <CreateTaskModalLogic bind:showModal>
+            <CreateTaskModal
+              {createTask}
+              on:taskCreated={closeModal}
+              {showModal}
+            />
+          </CreateTaskModalLogic>
         {/if}
       </div>
       <div
@@ -135,7 +131,7 @@
         {#each items as task ((task._id, task))}
           <div
             animate:flip={{ duration: flipDurationMs }}
-            class="bg-red-300 shadow-inner shadow-red-500/50 w-full h-[100px] flex items-center justify-center rounded-xl"
+            class="bg-red-300 shadow-inner shadow-red-500/50 w-full min-h-[100px] flex justify-start rounded-xl"
             role="button"
             tabindex="0"
           >

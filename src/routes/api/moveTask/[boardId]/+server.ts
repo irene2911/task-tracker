@@ -3,13 +3,13 @@ import axios from 'axios';
 
 export async function POST({ request, params }) {
   try {
-    const { selectedTask, toContainer, newIndex } = await request.json();
+    const { selectedTaskId, toContainer, newIndex } = await request.json();
     const { boardId } = params;
 
     const response = await axios.post(
       `http://localhost:3000/${boardId}/move-task`,
       {
-        selectedTask,
+        selectedTaskId,
         toContainer,
         newIndex,
       }

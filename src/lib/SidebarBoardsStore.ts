@@ -17,6 +17,7 @@ export interface Item {
   order: number;
   _id: string;
   text: string;
+  desc: string;
 }
 
 export const sidebarBoards = writable<SidebarBoard[]>([]);

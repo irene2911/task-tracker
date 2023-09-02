@@ -7,8 +7,8 @@
   export let boardDesc: string = '';
   let showEdit = false;
   let showInputs = false;
-  let newName: string = '';
-  let newDescription: string = '';
+  let newName: string = boardName;
+  let newDescription: string = boardDesc;
   let inputRef: HTMLInputElement | null = null;
 
   function handleShowEdit() {
@@ -79,7 +79,7 @@
         <input
           placeholder={boardName}
           name="renameInput"
-          class="block w-full rounded-lg border-0 ring-1 ring-gray-300 focus:ring-gray-400 outline-0 px-4 py-2"
+          class="block w-full rounded-lg border-0 ring-1 ring-gray-300 focus:ring-gray-400 outline-0 px-4 py-1 text-base"
           bind:this={inputRef}
           bind:value={newName}
           on:keydown={(event) => {
@@ -91,8 +91,7 @@
         <textarea
           rows={4}
           cols="30"
-          class="block w-full rounded-lg border-0 ring-1 ring-gray-300 focus:ring-gray-400 outline-0 px-4 py-2 resize-none"
-          placeholder={boardDesc}
+          class="block w-full rounded-lg border-0 ring-1 ring-gray-300 focus:ring-gray-400 outline-0 px-4 py-2 resize-none text-base"
           name="descriptionInput"
           bind:value={newDescription}
           on:keydown={(event) => {
@@ -103,29 +102,29 @@
         />
       </div>
     {:else if !showEdit && !showInputs}
-      <div>
-        <h1>{boardName}</h1>
-        <h5>{boardDesc}</h5>
+      <div class="flex flex-col gap-3">
+        <heade>{boardName}</heade>
+        <p class="text-base">{boardDesc}</p>
       </div>
-      <button on:click={handleShowEdit}>...</button>
+      <button on:click={handleShowEdit} class="hover:scale-105">...</button>
     {:else}
-      <div>
-        <h1>{boardName}</h1>
-        <h5>{boardDesc}</h5>
+      <div class="flex flex-col gap-3">
+        <heade>{boardName}</heade>
+        <p class="text-base">{boardDesc}</p>
       </div>
-      <button on:click={handleShowEdit}>x</button>
+      <button on:click={handleShowEdit} class="hover:scale-110">x</button>
     {/if}
   </div>
   {#if showEdit && !showInputs}
     <div class="w-full flex justify-end gap-5">
       <button
         on:click={handleShowInputs}
-        class="text-sm bg-red-200 shadow-inner shadow-red-400/50 rounded-2xl px-5 py-1 max-w-fit"
+        class="text-sm bg-red-200 shadow-inner shadow-red-400/50 rounded-2xl px-5 py-1 max-w-fit hover:bg-red-100"
         >Edit</button
       >
       <button
         on:click={deleteBoard}
-        class="text-sm bg-red-200 shadow-inner shadow-red-400/50 rounded-2xl px-5 py-1 max-w-fit"
+        class="text-sm bg-red-200 shadow-inner shadow-red-400/50 rounded-2xl px-5 py-1 max-w-fit hover:bg-red-100"
         >Delete</button
       >
     </div>

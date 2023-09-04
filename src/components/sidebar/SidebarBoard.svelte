@@ -27,7 +27,7 @@
   async function renameBoard() {
     try {
       await axios.put(`/api/renameBoard/${board._id}`, {
-        newName,
+        newStateName: newName,
       });
 
       // TODO: fix me

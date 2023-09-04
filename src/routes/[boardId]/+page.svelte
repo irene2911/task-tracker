@@ -1,6 +1,9 @@
 <script lang="ts">
+  import { overrideItemIdKeyNameBeforeInitialisingDndZones } from 'svelte-dnd-action';
+  overrideItemIdKeyNameBeforeInitialisingDndZones('_id');
   import StateContainer from '../../components/states/StateContainer.svelte';
   import BoardInfo from './boardHeader/BoardInfo.svelte';
+  import AddState from '../../components/states/AddState.svelte';
 
   export let data;
 </script>
@@ -15,12 +18,13 @@
         boardId={data?.container?._id}
         boardName={data?.container?.name}
       />
-      <div
-        class="flex justify-evenly gap-5 bg-gray-200/50 p-5 rounded-xl bg-gloss"
-      >
-        {#each data?.container?.states as state}
-          <StateContainer container={state} />
-        {/each}
+      <div class="flex-col bg-gray-200/50 rounded-xl bg-gloss w-full">
+        <AddState />
+        <div class="flex justify-evenly gap-5 p-5">
+          {#each data?.container?.states as state}
+            <StateContainer container={state} />
+          {/each}
+        </div>
       </div>
     {/if}
   </div>

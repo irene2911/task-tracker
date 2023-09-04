@@ -34,9 +34,9 @@
     class:gap-2={task.desc.length > 0}
   >
     <p class="px-4 truncate">
-      {#if $sidebarStore.sidebarIsOpened === false && maxName > 35}
+      {#if !$sidebarStore.sidebarIsOpened && maxName > 35}
         {trucatedTaskName}
-      {:else if $sidebarStore.sidebarIsOpened === true && maxName > 29}
+      {:else if $sidebarStore.sidebarIsOpened && maxName > 29}
         {trucatedTextSmall}
       {:else}
         {task.text}

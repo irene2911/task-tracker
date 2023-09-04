@@ -1,26 +1,40 @@
 <script lang="ts">
+  import { dndzone } from 'svelte-dnd-action';
   import Task from './Task.svelte';
   import { flip } from 'svelte/animate';
-  import { dndzone } from 'svelte-dnd-action';
   import axios from 'axios';
   import { invalidateAll } from '$app/navigation';
   import { page } from '$app/stores';
-  import { overrideItemIdKeyNameBeforeInitialisingDndZones } from 'svelte-dnd-action';
   import type { State } from '$lib/SidebarBoardsStore';
   import CreateTaskModalLogic from '../Modal/CreateTaskModalLogic.svelte';
   import CreateTaskModal from '../Modal/CreateTaskModal.svelte';
-  overrideItemIdKeyNameBeforeInitialisingDndZones('_id');
+  import AddState from './AddState.svelte';
 
   export let container: State;
-  let showAddInput = false;
+  let showAddTaskInput = false;
   let showModal = false;
+  let stateEditMode = false;
+  let StateisEditing = false;
+  let newStateName = container.name;
+  let inputRef: HTMLInputElement | null = null;
+
+  function closeState() {
+    StateisEditing = false;
+    stateEditMode = false;
+  }
+
+  $: {
+    if (StateisEditing) {
+      inputRef?.focus();
+    }
+  }
 
   function closeModal() {
-    showAddInput = false;
+    showAddTaskInput = false;
     showModal = false;
   }
   function openModal() {
-    showAddInput = true;
+    showAddTaskInput = true;
     showModal = true;
   }
 
@@ -40,6 +54,34 @@
       invalidateAll();
 
       taskText = '';
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function renameState() {
+    try {
+      let { boardId } = $page.params;
+      let columnId = container._id;
+      await axios.put(`/api/stateRename/${boardId}/${columnId}`, {
+        newStateName: newStateName,
+      });
+      // TODO: fix me
+      invalidateAll();
+      closeState();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function deleteState() {
+    try {
+      let { boardId } = $page.params;
+      let columnId = container._id;
+      await axios.delete(`/api/deleteState/${boardId}/${columnId}`);
+      // TODO: fix me
+      invalidateAll();
+      closeState();
     } catch (error) {
       console.log(error);
     }
@@ -101,22 +143,52 @@
         class="flex flex-col w-full justify-between items-center bg-slate-100 rounded-xl"
       >
         <div class="px-5 py-3 flex w-full justify-between">
-          <p class="flex justify-center items-center">{container.name}</p>
-          <div class="flex gap-3">
-            <button class="mb-1.5">...</button>
-            <button on:click={openModal} class="hover:scale-125">+</button>
-          </div>
-        </div>
-        {#if showAddInput}
-          <CreateTaskModalLogic bind:showModal>
-            <CreateTaskModal
-              {createTask}
-              on:taskCreated={closeModal}
-              {showModal}
+          {#if StateisEditing}
+            <input
+              class="block w-full rounded-lg border-0 ring-1 ring-gray-300 focus:ring-gray-400 outline-0 px-4 py-1 text-base"
+              bind:this={inputRef}
+              bind:value={newStateName}
+              on:keydown={(event) => {
+                if (event.key === 'Enter') {
+                  renameState();
+                }
+              }}
             />
-          </CreateTaskModalLogic>
-        {/if}
+          {:else}
+            <p class="flex justify-center items-center">{container.name}</p>
+            <div class="flex gap-3">
+              <button
+                class="mb-1.5"
+                on:click={() => (stateEditMode = !stateEditMode)}>...</button
+              >
+              <button on:click={openModal} class="hover:scale-125">+</button>
+            </div>
+          {/if}
+        </div>
+        <div class="flex flex-row w-full justify-evenly pb-2">
+          {#if stateEditMode && !StateisEditing}
+            <button on:click={() => (StateisEditing = true)}>edit</button>
+            <button on:click={deleteState}>delete</button>
+          {:else if StateisEditing && stateEditMode}
+            <button on:click={renameState}>OK</button>
+            <button
+              on:click={() => {
+                StateisEditing = false;
+                stateEditMode = false;
+              }}>cancel</button
+            >
+          {/if}
+        </div>
       </div>
+      {#if showAddTaskInput}
+        <CreateTaskModalLogic bind:showModal>
+          <CreateTaskModal
+            {createTask}
+            on:taskCreated={closeModal}
+            {showModal}
+          />
+        </CreateTaskModalLogic>
+      {/if}
       <div
         class="h-full overflow-y-scroll flex flex-col gap-3"
         use:dndzone={{

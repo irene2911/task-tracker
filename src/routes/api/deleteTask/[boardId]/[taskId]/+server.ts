@@ -2,11 +2,11 @@ import { json, type RequestHandler } from '@sveltejs/kit';
 import axios from 'axios';
 
 export const DELETE: RequestHandler = async ({ params }) => {
-  const { boardId, columnId } = params;
+  const { boardId, taskId } = params;
 
   try {
     const response = await axios.delete(
-      `http://localhost:3000/state/deleteState/${boardId}/${columnId}`
+      `http://localhost:3000/deleteTask/${boardId}/${taskId}`
     );
     return json({ status: 200, data: response.data });
   } catch (error) {

@@ -41,6 +41,19 @@
     }
   }
 
+  async function DeleteTask() {
+    try {
+      let { boardId } = $page.params;
+      let taskId = task._id;
+
+      await axios.delete(`/api/deleteTask/${boardId}/${taskId}`);
+      // TODO: fix me
+      invalidateAll();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   function closeModal() {
     showEdit = false;
     isTaskEmpty = false;
@@ -73,11 +86,18 @@
         >X</button
       >
     {:else}
-      <button
-        on:click={() => (showEdit = true)}
-        class="text-sm bg-red-200 shadow-inner shadow-red-400/50 rounded-2xl px-5 py-1 hover:bg-red-100"
-        >edit</button
-      >
+      <div class="flex flex-row gap-2c">
+        <button
+          on:click={() => (showEdit = true)}
+          class="text-sm bg-red-200 shadow-inner shadow-red-400/50 rounded-2xl px-5 py-1 hover:bg-red-100"
+          >edit</button
+        >
+        <button
+          on:click={() => DeleteTask()}
+          class="text-sm bg-red-200 shadow-inner shadow-red-400/50 rounded-2xl px-5 py-1 hover:bg-red-100"
+          >delete</button
+        >
+      </div>
     {/if}
     <div class="flex flex-col gap-4 text-start w-full">
       {#if showEdit}

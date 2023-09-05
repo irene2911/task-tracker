@@ -7,7 +7,7 @@ export const PUT: RequestHandler = async ({ params, request }) => {
 
   try {
     const response = await axios.put(
-      `http://localhost:3000/stateRename/${boardId}/${columnId}`,
+      `http://localhost:3000/state/stateRename/${boardId}/${columnId}`,
       { newStateName }
     );
     return json({ status: 200, data: response.data });

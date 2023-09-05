@@ -1,7 +1,7 @@
-import { json } from '@sveltejs/kit';
+import { json, type RequestHandler } from '@sveltejs/kit';
 import axios from 'axios';
 
-export async function POST({ request, params }) {
+export const POST: RequestHandler = async ({ request, params }) => {
   const { name } = await request.json();
   const { boardId } = params;
 
@@ -15,4 +15,4 @@ export async function POST({ request, params }) {
     console.log(error);
     return json({ status: 400, error });
   }
-}
+};

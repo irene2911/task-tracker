@@ -69,22 +69,23 @@ export const handleRename = (boardId: string) => {
   }));
 };
 
-export const handleOk = (boardId: string) => {
-  sidebarOptions.update((currentOptions) => ({
-    ...currentOptions,
-    [boardId]: {
-      isEditing: false,
-      isRenaming: false,
-    },
-  }));
-};
-
 export const closeEdit = (boardId: string) => {
   sidebarOptions.update((currentOptions) => ({
     ...currentOptions,
     [boardId]: {
       ...currentOptions[boardId],
       isEditing: false,
+      isRenaming: false,
+    },
+  }));
+};
+
+export const closeRename = (boardId: string) => {
+  sidebarOptions.update((currentOptions) => ({
+    ...currentOptions,
+    [boardId]: {
+      ...currentOptions[boardId],
+      isEditing: true,
       isRenaming: false,
     },
   }));

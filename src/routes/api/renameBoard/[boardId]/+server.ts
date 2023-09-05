@@ -1,4 +1,4 @@
-import { json } from '@sveltejs/kit';
+import { json, type RequestHandler } from '@sveltejs/kit';
 import axios from 'axios';
 
 interface UpdateData {
@@ -6,7 +6,7 @@ interface UpdateData {
   description?: string;
 }
 
-export async function PUT({ request, params }) {
+export const PUT: RequestHandler = async ({ request, params }) => {
   const { newName, newDescription } = await request.json();
   const { boardId } = params;
 
@@ -34,4 +34,4 @@ export async function PUT({ request, params }) {
     console.log(error);
     return json({ status: 400, error });
   }
-}
+};

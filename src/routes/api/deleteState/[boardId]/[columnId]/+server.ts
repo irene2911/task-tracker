@@ -1,7 +1,7 @@
-import { json } from '@sveltejs/kit';
+import { json, type RequestHandler } from '@sveltejs/kit';
 import axios from 'axios';
 
-export async function DELETE({ params }) {
+export const DELETE: RequestHandler = async ({ params }) => {
   const { boardId, columnId } = params;
 
   try {
@@ -13,4 +13,4 @@ export async function DELETE({ params }) {
     console.log(error);
     return json({ status: 400, error });
   }
-}
+};

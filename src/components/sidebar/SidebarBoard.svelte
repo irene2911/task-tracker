@@ -4,16 +4,15 @@
   import axios from 'axios';
   import {
     closeEdit,
+    closeRename,
     createBoardOptions,
     editBoard,
-    handleOk,
     handleRename,
     sidebarOptions,
   } from './store';
 
   export let board: SidebarBoard;
-  let newName: string = '';
-  let formRef: HTMLFormElement | null = null;
+  let newName: string = board.name;
   let inputRef: HTMLInputElement | null = null;
   let options = createBoardOptions(board._id);
   $: options = $sidebarOptions[board._id] || {};
@@ -27,13 +26,12 @@
   async function renameBoard() {
     try {
       await axios.put(`/api/renameBoard/${board._id}`, {
-        newStateName: newName,
+        newName,
       });
 
       // TODO: fix me
       invalidateAll();
-
-      newName = '';
+      closeEdit(board._id);
     } catch (error) {
       console.log(error);
     }
@@ -56,20 +54,17 @@
 >
   <div class="flex flex-row w-full justify-between items-center">
     {#if options.isRenaming}
-      <form on:submit={renameBoard} bind:this={formRef}>
-        <input
-          placeholder={board.name}
-          name="renameInput"
-          class="block w-full rounded-lg border-0 ring-0 focus:ring-red-500/30 focus:ring-1 outline-0 px-4 py-2 resize-none focus:bg-white bg-gray-50"
-          bind:this={inputRef}
-          bind:value={newName}
-          on:keypress={(e) => {
-            if (e.key === 'Enter') {
-              formRef?.submit();
-            }
-          }}
-        />
-      </form>
+      <input
+        name="renameInput"
+        class="block w-full rounded-lg border-0 ring-0 focus:ring-red-500/30 focus:ring-1 outline-0 px-4 py-2 resize-none focus:bg-white bg-gray-50"
+        bind:this={inputRef}
+        bind:value={newName}
+        on:keypress={(e) => {
+          if (e.key === 'Enter') {
+            renameBoard();
+          }
+        }}
+      />
     {:else}
       <a href={`/${board._id}`} class="w-full">
         <span>{board.name}</span>
@@ -100,12 +95,12 @@
   {:else if options.isRenaming}
     <div class="flex flex-row w-full justify-evenly">
       <button
-        on:click={() => handleOk(board._id)}
+        on:click={() => renameBoard()}
         class="text-sm bg-red-200 shadow-inner shadow-red-400/50 rounded-2xl px-5 py-1 hover:bg-red-100"
         >OK</button
       >
       <button
-        on:click={() => closeEdit(board._id)}
+        on:click={() => closeRename(board._id)}
         class="text-sm bg-red-200 shadow-inner shadow-red-400/50 rounded-2xl px-5 py-1 hover:bg-red-100"
         >X</button
       >

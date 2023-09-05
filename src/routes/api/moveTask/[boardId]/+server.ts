@@ -1,7 +1,7 @@
-import { json } from '@sveltejs/kit';
+import { json, type RequestHandler } from '@sveltejs/kit';
 import axios from 'axios';
 
-export async function POST({ request, params }) {
+export const POST: RequestHandler = async ({ request, params }) => {
   try {
     const { selectedTaskId, toContainer, newIndex } = await request.json();
     const { boardId } = params;
@@ -19,4 +19,4 @@ export async function POST({ request, params }) {
   } catch (error) {
     return json({ status: 400, error: 'Error moving task' });
   }
-}
+};

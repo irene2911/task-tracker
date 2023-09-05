@@ -1,7 +1,7 @@
-import { json } from '@sveltejs/kit';
+import { json, type RequestHandler } from '@sveltejs/kit';
 import axios from 'axios';
 
-export async function PUT({ params, request }) {
+export const PUT: RequestHandler = async ({ params, request }) => {
   const { newStateName } = await request.json();
   const { boardId, columnId } = params;
 
@@ -15,4 +15,4 @@ export async function PUT({ params, request }) {
     console.log(error);
     return json({ status: 400, error });
   }
-}
+};

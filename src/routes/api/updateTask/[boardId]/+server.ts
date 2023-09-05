@@ -1,4 +1,4 @@
-import { json } from '@sveltejs/kit';
+import { json, type RequestHandler } from '@sveltejs/kit';
 import axios from 'axios';
 
 interface UpdateTask {
@@ -7,7 +7,7 @@ interface UpdateTask {
   taskId: string;
 }
 
-export async function PUT({ request, params }) {
+export const PUT: RequestHandler = async ({ request, params }) => {
   const { newTaskDesc, newTaskText, taskId } = await request.json();
   const { boardId } = params;
 
@@ -35,4 +35,4 @@ export async function PUT({ request, params }) {
   } catch (error) {
     return json({ status: 400, error: 'Error moving task' });
   }
-}
+};

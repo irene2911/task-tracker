@@ -41,10 +41,10 @@
 </script>
 
 {#if loaded}
-  <div class="flex overflow-y-auto">
+  <div class="flex overflow-y-hidden h-screen">
     <div
       class={twMerge(
-        'transition-all duration-[430ms] w-[350px] relative min-h-screen',
+        'transition-all duration-[430ms] w-[350px] relative h-full',
         !$sidebarStore.sidebarIsOpened && 'w-20 transition-all duration-[430ms]'
       )}
     >
@@ -55,10 +55,13 @@
         <CollapsedSidebar />
       {/if}
       <button
-        class="w-[16px] h-[150px] absolute -right-4 top-[35%] bg-gray-200/80 hover:bg-red-300 hover:shadow-inner hover:shadow-red-500/60 rounded-e-xl"
+        class="w-[16px] h-[150px] absolute -right-4 top-[35%] bg-gray-200/80 hover:bg-red-300 hover:shadow-inner hover:shadow-red-500/60 rounded-e-xl z-10"
         on:click={toggleSidebar}
       />
     </div>
     <slot />
   </div>
 {/if}
+
+<style>
+</style>

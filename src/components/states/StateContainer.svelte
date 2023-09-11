@@ -217,10 +217,6 @@
 </section>
 
 <style>
-  /* .bg-gloss {
-    backdrop-filter: blur(4px) contrast(1.2);
-  } */
-
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
   }

@@ -12,7 +12,8 @@
 </script>
 
 <a href={`/${board._id}`}>
-  <button class="bg-red-200 rounded-2xl py-5 w-full"
+  <button
+    class="bg-red-300/90 shadow-inner shadow-red-500/50 rounded-2xl py-5 w-full"
     >{collapsedBoardName}</button
   >
 </a>

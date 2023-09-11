@@ -32,10 +32,10 @@
   }
 </script>
 
-<section class="bg-slate-200/50 h-full flex flex-row justify-end w-full">
+<section class="bg-slate-100 h-full flex flex-row justify-end w-full">
   <div class="flex flex-col px-5 py-5 w-full">
     <div
-      class="border-[2px] border-gray-300 flex flex-row w-full justify-between items-center p-4 rounded-2xl"
+      class="border-[1px] border-gray-300 flex flex-row w-full justify-between items-center p-4 rounded-2xl bg-slate-200/20 shadow-inner shadow-slate-400/30"
     >
       <User />
     </div>

@@ -72,10 +72,10 @@
   }
 </script>
 
-<div class="bg-gray-200/50 w-full rounded-md p-5 bg-gloss flex flex-col gap-5">
+<div class="w-full rounded-md p-5 pb-2 flex flex-col">
   <div class="flex flex-row w-full justify-between text-xl">
     {#if showInputs}
-      <div class="flex flex-col gap-5">
+      <div class="flex flex-col gap-2">
         <input
           placeholder={boardName}
           name="renameInput"
@@ -102,7 +102,7 @@
         />
       </div>
     {:else if !showEdit && !showInputs}
-      <div class="flex flex-col gap-3">
+      <div class="flex flex-col gap-1">
         <heade>{boardName}</heade>
         <p class="text-base">{boardDesc}</p>
       </div>
@@ -137,15 +137,9 @@
       >
       <button
         on:click={handleShowEdit}
-        class="text-sm bg-red-200 shadow-inner shadow-red-400/50 rounded-2xl px-5 py-1 max-w-fit"
+        class="text-sm bg-red-200 shadow-inner shadow-red-400/50 rounded-2xl px-5 max-w-fit"
         >Close</button
       >
     </div>
   {/if}
 </div>
-
-<style>
-  .bg-gloss {
-    backdrop-filter: blur(2px) contrast(1.2);
-  }
-</style>

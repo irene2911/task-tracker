@@ -29,7 +29,7 @@
 
 {#if showAddState}
   <button
-    class="w-full pt-3 text-xl"
+    class="w-full text-xl pb-1"
     on:click={() => (showAddState = !showAddState)}>X</button
   >
   <div class="flex flex-row w-full items-center justify-center gap-2">
@@ -47,7 +47,7 @@
   </div>
 {:else}
   <button
-    class="w-full pt-3 text-xl"
+    class="w-full text-2xl pb-1"
     on:click={() => (showAddState = !showAddState)}>+</button
   >
 {/if}

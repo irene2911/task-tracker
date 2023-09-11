@@ -8,7 +8,6 @@
   import type { State } from '$lib/SidebarBoardsStore';
   import CreateTaskModalLogic from '../Modal/CreateTaskModalLogic.svelte';
   import CreateTaskModal from '../Modal/CreateTaskModal.svelte';
-  import AddState from './AddState.svelte';
 
   export let container: State;
   let showAddTaskInput = false;
@@ -136,11 +135,13 @@
     })) ?? [];
 </script>
 
-<section class="flex flex-row w-full justify-evenly gap-5 flex-1">
+<section
+  class="flex flex-row w-full justify-evenly gap-5 flex-1 min-w-[250px] max-w-[300px] rounded-2xl pb-3"
+>
   <div class="min-h-[70vh] w-full">
-    <div class="h-full flex flex-col gap-4">
+    <div class="h-full flex flex-col overflow-hidden gap-3">
       <div
-        class="flex flex-col w-full justify-between items-center bg-slate-100 rounded-xl"
+        class="flex flex-col w-full justify-between items-center bg-white/90 rounded-xl"
       >
         <div class="px-5 py-3 flex w-full justify-between">
           {#if StateisEditing}
@@ -190,7 +191,7 @@
         </CreateTaskModalLogic>
       {/if}
       <div
-        class="h-full overflow-y-scroll flex flex-col gap-3"
+        class="h-full overflow-scroll flex flex-col gap-3 max-h-[500px] scrollbar-hide rounded-2xl border-2 border-slate-100/40"
         use:dndzone={{
           items,
           flipDurationMs,
@@ -203,7 +204,7 @@
         {#each items as task ((task._id, task))}
           <div
             animate:flip={{ duration: flipDurationMs }}
-            class="bg-red-300 shadow-inner shadow-red-500/50 w-full min-h-[100px] flex justify-start rounded-xl"
+            class="bg-red-300 shadow-inner shadow-red-500/50 w-full flex justify-start rounded-xl"
             role="button"
             tabindex="0"
           >
@@ -214,3 +215,17 @@
     </div>
   </div>
 </section>
+
+<style>
+  /* .bg-gloss {
+    backdrop-filter: blur(4px) contrast(1.2);
+  } */
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+</style>
